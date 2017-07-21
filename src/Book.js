@@ -1,6 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import BookActions from './BookActions'
 import './App.css'
+
+const bookActions = [
+  { value: 'none', text: 'Move too...' },
+  { value: 'currentlyReading', text: 'Currently Reading' },
+  { value: 'wantToRead', text: 'Want to Read' },
+  { value: 'read', text: 'Read' },
+  { value: 'none', text: 'None' },
+]
 
 const Book = ({ backgroundImage, title, author }) => (
   <div className="book">
@@ -14,15 +23,7 @@ const Book = ({ backgroundImage, title, author }) => (
         }}
       >
       </div>
-      <div className="book-shelf-changer">
-        <select>
-          <option value="none" disabled>Move to...</option>
-          <option value="currentlyReading">Currently Reading</option>
-          <option value="wantToRead">Want to Read</option>
-          <option value="read">Read</option>
-          <option value="none">None</option>
-        </select>
-      </div>
+      <BookActions actions={bookActions} />
     </div>
     <div className="book-title">{title}</div>
     <div className="book-authors">{author}</div>
