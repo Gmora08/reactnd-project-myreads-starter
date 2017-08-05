@@ -42,9 +42,9 @@ export default class Library extends Component {
             <div>
               <div className="list-books-content">
                 <div>
-                  <Bookshelf books={this.state.books} shelfTitle="Currently Reading" />
-                  <Bookshelf books={this.state.books} shelfTitle="Want to Read" />
-                  <Bookshelf books={this.state.books} shelfTitle="Read" />
+                  <Bookshelf books={this.state.books} shelfTitle="Currently Reading" type="currentlyReading" />
+                  <Bookshelf books={this.state.books} shelfTitle="Want to Read" type="wantToRead" />
+                  <Bookshelf books={this.state.books} shelfTitle="Read" type="read" />
                 </div>
               </div>
               <div className="open-search">
