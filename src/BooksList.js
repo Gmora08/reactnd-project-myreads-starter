@@ -15,9 +15,9 @@ export default class BooksList extends Component {
     return (
       <li key={index}>
         <Book
-          backgroundImage={book.backgroundImage}
+          backgroundImage={book.imageLinks.smallThumbnail}
           title={book.title}
-          author={book.author}
+          author={book.authors[0]}
         />
       </li>
     )
