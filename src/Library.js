@@ -6,8 +6,14 @@ import Bookshelf from './Bookshelf'
 
 export default class Library extends Component {
 
-  state = {
-    isLoadingBooks: true,
+  constructor(props){
+  	super(props);
+  	this.state = {
+      isLoadingBooks: true,
+      books: {},
+    };
+    this.getBooks = this.getBooks.bind(this)
+    this.updateBook = this.updateBook.bind(this)
   }
 
   componentDidMount() {
@@ -22,6 +28,18 @@ export default class Library extends Component {
     .catch((err) => {
       console.log(err)
     })
+  }
+
+  updateBook(book, shelf) {
+    BooksAPI.update(book, shelf)
+    .then(() => {
+      this.setState((prevState) => {
+        const bookIndex = prevState.books.findIndex(b => (b.id === book.id ))
+        prevState.books[bookIndex].shelf = shelf
+        return { books: prevState.books }
+      })
+    })
+    .catch(console.log)
   }
 
   render() {
@@ -42,9 +60,24 @@ export default class Library extends Component {
             <div>
               <div className="list-books-content">
                 <div>
-                  <Bookshelf books={this.state.books} shelfTitle="Currently Reading" type="currentlyReading" />
-                  <Bookshelf books={this.state.books} shelfTitle="Want to Read" type="wantToRead" />
-                  <Bookshelf books={this.state.books} shelfTitle="Read" type="read" />
+                  <Bookshelf
+                    books={this.state.books}
+                    updateBook={this.updateBook}
+                    shelfTitle="Currently Reading"
+                    type="currentlyReading"
+                  />
+                  <Bookshelf
+                    books={this.state.books}
+                    updateBook={this.updateBook}
+                    shelfTitle="Want to Read"
+                    type="wantToRead"
+                  />
+                  <Bookshelf
+                    books={this.state.books}
+                    updateBook={this.updateBook}
+                    shelfTitle="Read"
+                    type="read"
+                  />
                 </div>
               </div>
               <div className="open-search">

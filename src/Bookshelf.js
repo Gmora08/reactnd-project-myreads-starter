@@ -5,6 +5,7 @@ import BooksList from './BooksList'
 export default class MyComponent extends Component {
 
   static propTypes = {
+    updateBook: PropTypes.func.isRequired,
     shelfTitle: PropTypes.string.isRequired,
     books: PropTypes.array.isRequired,
     type: PropTypes.string.isRequired,
@@ -16,7 +17,7 @@ export default class MyComponent extends Component {
       <div className="bookshelf">
         <h2 className="bookshelf-title">{this.props.shelfTitle}</h2>
         <div className="bookshelf-books">
-          <BooksList books={books} />
+          <BooksList updateBook={this.props.updateBook} books={books} shelfValue={this.props.type} />
         </div>
       </div>
     );
