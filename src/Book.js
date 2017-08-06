@@ -25,7 +25,11 @@ const Book = ({ id, backgroundImage, title, author, shelfValue, changeShelf }) =
       <BookActions id={id} changeShelf={changeShelf} actions={bookActions} value={shelfValue} />
     </div>
     <div className="book-title">{title}</div>
-    <div className="book-authors">{author}</div>
+    {
+      author.length ? (
+        author.map((obj, index) => (<div key={index} className="book-authors">{obj}</div>))
+      ) : null
+    }
   </div>
 )
 
@@ -33,9 +37,13 @@ Book.propTypes = {
   id: PropTypes.string.isRequired,
   backgroundImage: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  author: PropTypes.string.isRequired,
+  author: PropTypes.arrayOf(PropTypes.string),
   shelfValue: PropTypes.string.isRequired,
   changeShelf: PropTypes.func.isRequired,
+}
+
+Book.defaultProps = {
+  author: [],
 }
 
 export default Book;

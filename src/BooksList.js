@@ -32,7 +32,7 @@ export default class BooksList extends Component {
           id={book.id}
           backgroundImage={book.imageLinks.smallThumbnail}
           title={book.title}
-          author={book.authors[0]}
+          author={book.authors}
           shelfValue={this.props.shelfValue}
           changeShelf={this.changeShelf}
         />

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 const BookActions = ({ id, actions, value, changeShelf }) => (
   <div className="book-shelf-changer">
     <select value={value} onChange={e => (changeShelf(e, id))}>
-      <option value="none" disabled>Move to...</option>
+      <option disabled>Move to...</option>
       {
         actions.map((action, index) => (<option key={index} value={action.value}>{action.text}</option>))
       }
