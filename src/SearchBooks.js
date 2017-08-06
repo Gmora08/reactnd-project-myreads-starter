@@ -55,6 +55,8 @@ export default class SearchBooks extends Component {
         const index = this.state.books.findIndex(b => b.id === book.id)
         if (index !== -1) {
           return this.state.books[index]
+        } else {
+          book.shelf = "none"
         }
         return book
       })
