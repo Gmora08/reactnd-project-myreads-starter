@@ -35,7 +35,7 @@ const Book = ({ id, backgroundImage, title, author, shelfValue, changeShelf }) =
 
 Book.propTypes = {
   id: PropTypes.string.isRequired,
-  backgroundImage: PropTypes.string.isRequired,
+  backgroundImage: PropTypes.string,
   title: PropTypes.string.isRequired,
   author: PropTypes.arrayOf(PropTypes.string),
   shelfValue: PropTypes.string.isRequired,
@@ -44,6 +44,7 @@ Book.propTypes = {
 
 Book.defaultProps = {
   author: [],
+  backgroundImage: 'https://www.catswhocode.com/blog/wp-content/uploads/2008/10/ebook-cover1.png',
 }
 
 export default Book;
