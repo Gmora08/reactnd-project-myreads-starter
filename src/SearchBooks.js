@@ -12,17 +12,26 @@ export default class SearchBooks extends Component {
       timeout: null,
       searchParam: '',
       searchedBooks: [],
+      books: {},
     };
     this.searchBooks = this.searchBooks.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.changeShelf = this.changeShelf.bind(this)
   }
 
+  componentDidMount() {
+    BooksAPI.getAll()
+    .then(res => (
+      this.setState({ books: res })
+    ))
+    .catch(console.log)
+  }
+
   handleChange(event) {
     if (event.target.value.length > 0) {
       window.clearTimeout(this.state.timeout)
       this.setState({
-        timeout: window.setTimeout(this.searchBooks, 1000),
+        timeout: window.setTimeout(this.searchBooks, 500),
         searchParam: event.target.value,
       })
     } else {
@@ -33,8 +42,14 @@ export default class SearchBooks extends Component {
   searchBooks() {
     BooksAPI.search(this.state.searchParam, 20)
     .then((res) => {
-      console.log(res);
-      this.setState({ searchedBooks: res })
+      const books = res.map((book) => {
+        const index = this.state.books.findIndex(b => b.id === book.id)
+        if (index !== -1) {
+          return this.state.books[index]
+        }
+        return book
+      })
+      this.setState({ searchedBooks: books })
     })
     .catch(console.log)
   }
@@ -70,18 +85,21 @@ export default class SearchBooks extends Component {
             (
               <ol className="books-grid">
                 {
-                  this.state.searchedBooks.map((book, index) => (
-                    <li key={index}>
-                      <Book
-                        id={book.id}
-                        backgroundImage={book.imageLinks.smallThumbnail}
-                        title={book.title}
-                        author={book.authors}
-                        shelfValue={book.shelf}
-                        changeShelf={this.changeShelf}
-                      />
-                    </li>
-                  ))
+                  this.state.searchedBooks.map((book, index) => {
+                    const thumbnail = book.imageLinks ? book.imageLinks.smallThumbnail : null
+                    return (
+                      <li key={index}>
+                        <Book
+                          id={book.id}
+                          backgroundImage={thumbnail}
+                          title={book.title}
+                          author={book.authors}
+                          shelfValue={book.shelf}
+                          changeShelf={this.changeShelf}
+                        />
+                      </li>
+                    )
+                  })
                 }
               </ol>
             )
