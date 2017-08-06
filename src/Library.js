@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import * as BooksAPI from './BooksAPI'
 import Bookshelf from './Bookshelf'
+import Loader from './Loader'
 
 export default class Library extends Component {
 
@@ -51,9 +52,7 @@ export default class Library extends Component {
         {
           this.state.isLoadingBooks ?
           (
-            <div id="loader">
-              <img src="http://www.jordiros.me/glgifomatic/images/loading.gif" alt="loader"/>
-            </div>
+            <Loader />
           )
           :
           (
