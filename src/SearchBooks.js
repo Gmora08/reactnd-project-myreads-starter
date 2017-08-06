@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 import * as BooksAPI from './BooksAPI'
 import Book from './Book'
+import Loader from './Loader'
 
 export default class SearchBooks extends Component {
 
@@ -11,6 +12,7 @@ export default class SearchBooks extends Component {
     this.state = {
       timeout: null,
       searchParam: '',
+      isSearchingBooks: false,
       searchedBooks: [],
       books: {},
     };
@@ -40,6 +42,7 @@ export default class SearchBooks extends Component {
   }
 
   searchBooks() {
+    this.setState({ isSearchingBooks: true })
     BooksAPI.search(this.state.searchParam, 20)
     .then((res) => {
       const books = res.map((book) => {
@@ -49,7 +52,7 @@ export default class SearchBooks extends Component {
         }
         return book
       })
-      this.setState({ searchedBooks: books })
+      this.setState({ searchedBooks: books, isSearchingBooks: false })
     })
     .catch(console.log)
   }
@@ -79,33 +82,42 @@ export default class SearchBooks extends Component {
               placeholder="Search by title or author"/>
           </div>
         </div>
-        <div className="search-books-results">
-          {
-            this.state.searchedBooks.length ?
-            (
-              <ol className="books-grid">
-                {
-                  this.state.searchedBooks.map((book, index) => {
-                    const thumbnail = book.imageLinks ? book.imageLinks.smallThumbnail : null
-                    return (
-                      <li key={index}>
-                        <Book
-                          id={book.id}
-                          backgroundImage={thumbnail}
-                          title={book.title}
-                          author={book.authors}
-                          shelfValue={book.shelf}
-                          changeShelf={this.changeShelf}
-                        />
-                      </li>
-                    )
-                  })
-                }
-              </ol>
-            )
-            : null
-          }
-        </div>
+        {
+          this.state.isSearchingBooks ?
+          (
+            <Loader />
+          )
+          :
+          (
+            <div className="search-books-results">
+              {
+                this.state.searchedBooks.length ?
+                (
+                  <ol className="books-grid">
+                    {
+                      this.state.searchedBooks.map((book, index) => {
+                        const thumbnail = book.imageLinks ? book.imageLinks.smallThumbnail : null
+                        return (
+                          <li key={index}>
+                            <Book
+                              id={book.id}
+                              backgroundImage={thumbnail}
+                              title={book.title}
+                              author={book.authors}
+                              shelfValue={book.shelf}
+                              changeShelf={this.changeShelf}
+                            />
+                          </li>
+                        )
+                      })
+                    }
+                  </ol>
+                )
+                : null
+              }
+            </div>
+          )
+        }
       </div>
     );
   }
