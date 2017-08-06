@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 import * as BooksAPI from './BooksAPI'
 import Book from './Book'
+import SearchBooksResults from './SearchBooksResults'
 import Loader from './Loader'
 
 export default class SearchBooks extends Component {
@@ -14,7 +15,7 @@ export default class SearchBooks extends Component {
       searchParam: '',
       isSearchingBooks: false,
       searchedBooks: [],
-      books: {},
+      books: [],
     };
     this.searchBooks = this.searchBooks.bind(this)
     this.handleChange = this.handleChange.bind(this)
@@ -35,16 +36,21 @@ export default class SearchBooks extends Component {
       this.setState({
         timeout: window.setTimeout(this.searchBooks, 500),
         searchParam: event.target.value,
+        isSearchingBooks: true,
       })
     } else {
+      this.setState({ isSearchingBooks: false, searchParam: '' })
       window.clearTimeout(this.state.timeout)
     }
   }
 
   searchBooks() {
-    this.setState({ isSearchingBooks: true })
     BooksAPI.search(this.state.searchParam, 20)
     .then((res) => {
+      if (res.error) {
+        this.setState({ isSearchingBooks: false, searchedBooks: [] })
+        return false;
+      }
       const books = res.map((book) => {
         const index = this.state.books.findIndex(b => b.id === book.id)
         if (index !== -1) {
@@ -89,35 +95,11 @@ export default class SearchBooks extends Component {
             <Loader />
           )
           :
-          (
-            <div className="search-books-results">
-              {
-                this.state.searchedBooks.length ?
-                (
-                  <ol className="books-grid">
-                    {
-                      this.state.searchedBooks.map((book, index) => {
-                        const thumbnail = book.imageLinks ? book.imageLinks.smallThumbnail : null
-                        return (
-                          <li key={index}>
-                            <Book
-                              id={book.id}
-                              backgroundImage={thumbnail}
-                              title={book.title}
-                              author={book.authors}
-                              shelfValue={book.shelf}
-                              changeShelf={this.changeShelf}
-                            />
-                          </li>
-                        )
-                      })
-                    }
-                  </ol>
-                )
-                : null
-              }
-            </div>
-          )
+            <SearchBooksResults
+              searchParam={this.state.searchParam}
+              changeShelf={this.changeShelf}
+              searchedBooks={this.state.searchedBooks}
+            />
         }
       </div>
     );
