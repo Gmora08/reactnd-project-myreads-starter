@@ -66,6 +66,7 @@ export default class SearchBooks extends Component {
         prevState.searchedBooks[bookIndex].shelf = shelf
         return { searchedBooks: prevState.searchedBooks }
       })
+      this.props.history.push('/')
     })
     .catch(console.log)
   }
