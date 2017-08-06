@@ -1,6 +1,5 @@
 import React from 'react'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
-import * as BooksAPI from './BooksAPI'
 import Library from './Library'
 import SearchBooks from './SearchBooks'
 import './App.css'
